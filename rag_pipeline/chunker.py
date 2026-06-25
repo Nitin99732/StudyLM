@@ -1,13 +1,15 @@
 from langchain_text_splitters import MarkdownHeaderTextSplitter, RecursiveCharacterTextSplitter
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class Chunker:
 
     def __init__(
           self, 
           text : str,
-          chunk_size: int = 100,
-          chunk_overlap: int = 20
+          chunk_size: int = 512,
+          chunk_overlap: int = 100
     ):
         self.text = text
         
@@ -19,7 +21,8 @@ class Chunker:
             ]
         )
 
-        self.recursive_splitter = RecursiveCharacterTextSplitter(
+        self.recursive_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+            model_name="text-embedding-3-small",
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap
         )
